@@ -1,1 +1,10 @@
 Bracket: 5/8" wide, 1/4" holes, 1/8" thick
+
+bracket + 3mm of plastic = 5.52mm
+screw head: 3.8mm
+sensor assembly: 7.7
+
+
+50 = x - (3.8 + 5.52) + 7.7
+50 = x - 1.62
+51.62 = x
