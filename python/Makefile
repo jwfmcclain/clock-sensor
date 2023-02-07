@@ -3,8 +3,8 @@
 TARGET_DIR=/Volumes/CIRCUITPY
 LIB_DIR=$(TARGET_DIR)/lib
 
-CODE=$(addprefix $(TARGET_DIR)/, code.py)
-LIBS=$(addprefix $(LIB_DIR)/, adafruit_vl53l4cd.mpy adafruit_bus_device adafruit_display_text adafruit_bitmap_font adafruit_lc709203f.mpy adafruit_register)
+CODE=$(addprefix $(TARGET_DIR)/, code.py secrets.py)
+LIBS=$(addprefix $(LIB_DIR)/, adafruit_vl53l4cd.mpy adafruit_bus_device adafruit_display_text adafruit_bitmap_font adafruit_lc709203f.mpy adafruit_register adafruit_requests.mpy)
 
 $(TARGET_DIR)/%.py: %.py
 	cp $< $@
