@@ -5,3 +5,9 @@ id = "DataPosting"
 display_name = "data posting"
 description = "allow posting of clock status"
 allows = [ "POST /clock-report" ]
+
+[[permissions]]
+id = "Observing"
+display_name = "observing"
+description = "inspecting collected data"
+allows = [ "GET / /last /plot.html /plot.png" ]
