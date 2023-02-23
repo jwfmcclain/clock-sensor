@@ -6,7 +6,15 @@
   <body>
     <center>
       <h1>Clock Sensor Metrics</h1>
-      <img src="/plot.png"/>
+      <img src="/plot.png?days={{days_back}}"/><br>
+      <button onclick="window.location.href='/plot.html?days=31';">One Month</button>
+      <button onclick="window.location.href='/plot.html?days=14';">Fortnight</button>
+      <button onclick="window.location.href='/plot.html?days=7';">Week</button>
+      <button onclick="window.location.href='/plot.html?days=4';">Four Days</button>
+      <button onclick="window.location.href='/plot.html?days=2';">Two Days</button>
+      <button onclick="window.location.href='/plot.html?days=1';">24 Hours</button>
+      <br>
+      <button onclick="window.location.href='/last?count={{2**16}}';">Daw Data</button>
     </center>
   </body>
 </html>

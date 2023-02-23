@@ -46,7 +46,11 @@ class MyServer(BaseHTTPRequestHandler):
         path = pp.path
         params = urllib.parse.parse_qs(pp.query)
 
-        if path == "/last" or path == '/':
+        if path == '/':
+            self.send_response(302)
+            self.send_header('Location', "/plot.html")
+            self.end_headers()
+        elif path == "/last" or path == '/':
             try:
                 n = int(params.get('count', (12,) )[0])
             except ValueError:
@@ -60,15 +64,18 @@ class MyServer(BaseHTTPRequestHandler):
             for timestamp, distance, battery in clog.last_records(n):
                 self.wfile.write(bytes(f"{timestamp}: {distance}mm {battery}%\n", "utf-8"))
         elif path == "/plot.html":
+            try:
+                days_back = float(params.get('days', (4,), )[0])
+            except ValueError:
+                self.send_error(400, f"count must be a number: {params['count']}")
+                return
+
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
 
-            for s in plot_template.stream():
+            for s in plot_template.stream(days_back=days_back):
                 self.wfile.write(bytes(s, "utf-8"))
-
-            # with open("templates/plot.html", 'rb') as page:
-            #     shutil.copyfileobj(page, self.wfile)
         elif path == "/plot.png":
             try:
                 days_back = datetime.timedelta(float(params.get('days', (4,), )[0]))
