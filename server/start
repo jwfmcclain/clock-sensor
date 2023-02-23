@@ -1,0 +1,8 @@
+#! /usr/bin/sh
+
+MPLCONFIGDIR=`pwd`
+export MPLCONFIGDIR
+
+cmd="python3 -u main.py $1"
+echo $cmd
+exec $cmd

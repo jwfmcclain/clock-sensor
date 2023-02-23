@@ -1,0 +1,7 @@
+service_name = "Sanctuary Clock Logger"
+
+[[permissions]]
+id = "DataPosting"
+display_name = "data posting"
+description = "allow posting of clock status"
+allows = [ "POST /clock-report" ]

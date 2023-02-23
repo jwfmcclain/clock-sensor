@@ -1,3 +1,6 @@
 .DS_Store
 lib
 *~
+__pycache__
+secrets.py
+server/stage.tar
