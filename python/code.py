@@ -139,8 +139,8 @@ def setup_vl53(battery_monitor):
     return vl53
 
 battery_monitor = LC709203F(board.I2C())
-# battery_monitor.pack_size = PackSize.MAH2000
-battery_monitor.pack_size = PackSize.MAH400
+battery_monitor.pack_size = PackSize.MAH2000
+# battery_monitor.pack_size = PackSize.MAH400
 vl53 =  setup_vl53(battery_monitor)
 
 boot_time = time.time()
@@ -180,7 +180,6 @@ print(f"Connecting to {secrets['ssid']}")
 try:
     wifi.radio.connect(secrets["ssid"], secrets["password"])
 except Exception as e: # pylint: disable=broad-except
-    state.record_wifi_failure()
     print(e)
     print(f"Sleeping, will retry in {RETRY_INTERVAL}")
     go_to_sleep(RETRY_INTERVAL)
@@ -197,7 +196,6 @@ try:
                             headers={"Authorization" : f"Bearer {secrets['kou_key']}"})
 
 except Exception as e: # pylint: disable=broad-except
-    state.record_http_failure()
     print(e)
     print(f"Sleeping, will retry in {RETRY_INTERVAL}")
     go_to_sleep(RETRY_INTERVAL)
