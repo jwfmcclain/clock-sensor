@@ -1,9 +1,12 @@
 import sys
+import shutil
 import datetime
 import urllib.parse
 from io import BytesIO
 
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+from jinja2 import Environment, FileSystemLoader
 
 import matplotlib
 from matplotlib.figure import Figure
@@ -11,6 +14,8 @@ from matplotlib.figure import Figure
 from circular_log import CircularLog
 
 host_name = ''
+env = Environment(loader=FileSystemLoader("templates"), autoescape=True)
+plot_template = env.get_template("plot.html")
 
 clog = CircularLog.from_file("circular-log",
                              4*24*32) # a month plus some slop
@@ -47,20 +52,30 @@ class MyServer(BaseHTTPRequestHandler):
             except ValueError:
                 self.send_error(400, f"count must be a number: {params['count']}")
                 return
-            
+
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            
+
             for timestamp, distance, battery in clog.last_records(n):
                 self.wfile.write(bytes(f"{timestamp}: {distance}mm {battery}%\n", "utf-8"))
-        elif path == "/plot":
+        elif path == "/plot.html":
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+
+            for s in plot_template.stream():
+                self.wfile.write(bytes(s, "utf-8"))
+
+            # with open("templates/plot.html", 'rb') as page:
+            #     shutil.copyfileobj(page, self.wfile)
+        elif path == "/plot.png":
             try:
                 days_back = datetime.timedelta(float(params.get('days', (4,), )[0]))
             except ValueError:
                 self.send_error(400, f"count must be a number: {params['count']}")
                 return
-            
+
             self.send_response(200)
             self.send_header("Content-type", "image/png")
             self.end_headers()
@@ -85,7 +100,7 @@ class MyServer(BaseHTTPRequestHandler):
             l_battery, = ax_battery.plot(times, battery_data, 'y')
 
             ax_battery.legend([l_distance, l_battery], ["Drive Weigth Drop", "Battery Level"])
-            
+
             # Save it to a temporary buffer.
             buf = BytesIO()
             fig.savefig(buf, format="png")
